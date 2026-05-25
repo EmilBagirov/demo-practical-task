@@ -105,6 +105,37 @@ To install all supported browsers:
 
 ---
 
+## CI / GitHub Actions
+
+The pipeline is defined in `.github/workflows/ci.yml` and runs automatically on every push and pull request to `main`.
+
+### What it does
+
+| Step | Detail |
+|------|--------|
+| **Checkout** | Checks out the repository |
+| **Java 17** | Sets up Temurin JDK 17; Maven dependency cache is restored automatically |
+| **Allure CLI cache** | Caches `~/.allure/allure-2.27.0` across runs to skip re-download |
+| **Playwright system deps** | Installs OS-level libraries required by Chromium on Linux (`install-deps`) |
+| **Playwright browser** | Downloads the Chromium binary used by UI tests |
+| **`mvn clean test`** | Runs the full test suite; Allure report is generated automatically via the bound `test` phase |
+| **Upload report** | Allure HTML report uploaded as a workflow artifact (14-day retention) |
+| **Upload results** | Raw Allure JSON results uploaded as an artifact (7-day retention) |
+| **Publish to Pages** | On push to `main` only — deploys the Allure report to GitHub Pages |
+
+### Viewing results
+
+- **Artifacts** — download the `allure-report` zip from any completed Actions run
+- **GitHub Pages** — live Allure report published automatically after each successful push to `main` (enable once under *Settings → Pages → Source: GitHub Actions*)
+
+### One-time GitHub Pages setup
+
+1. Go to your repo → **Settings → Pages**
+2. Under *Source*, select **GitHub Actions**
+3. The next push to `main` will publish the report and print the URL in the `publish-report` job output
+
+---
+
 ## Project Structure
 
 ```
