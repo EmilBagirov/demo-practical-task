@@ -30,12 +30,14 @@ jobs:
         run: |
           mvn test-compile exec:java \
             -Dexec.mainClass=com.microsoft.playwright.CLI \
+            -Dexec.classpathScope=test \
             -Dexec.args="install-deps chromium"
 
       - name: Install Playwright browser binaries
         run: |
           mvn test-compile exec:java \
             -Dexec.mainClass=com.microsoft.playwright.CLI \
+            -Dexec.classpathScope=test \
             -Dexec.args="install chromium"
 
       - name: Run tests
