@@ -1,7 +1,7 @@
 package com.flamingo.qa.tests.api.rest.booker;
 
-import com.flamingo.qa.model.booking.Booking;
-import com.flamingo.qa.model.booking.BookingId;
+import com.flamingo.qa.models.booking.Booking;
+import com.flamingo.qa.models.booking.BookingId;
 import com.flamingo.qa.testdata.BookingTestData;
 import com.flamingo.qa.tests.api.base.BaseBookerTest;
 import io.qameta.allure.Description;

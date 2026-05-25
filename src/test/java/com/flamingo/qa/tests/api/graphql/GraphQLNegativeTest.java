@@ -1,7 +1,7 @@
 package com.flamingo.qa.tests.api.graphql;
 
 import com.flamingo.qa.tests.api.base.BaseGraphQLTest;
-import com.flamingo.qa.model.graphql.GraphQLRequest;
+import com.flamingo.qa.models.graphql.GraphQLRequest;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;

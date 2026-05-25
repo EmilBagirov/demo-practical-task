@@ -1,7 +1,7 @@
-package com.flamingo.qa.service;
+package com.flamingo.qa.services;
 
-import com.flamingo.qa.config.ApiConfig;
-import com.flamingo.qa.model.graphql.GraphQLRequest;
+import com.flamingo.qa.configs.ApiConfig;
+import com.flamingo.qa.models.graphql.GraphQLRequest;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;

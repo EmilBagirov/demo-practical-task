@@ -1,4 +1,4 @@
-package com.flamingo.qa.model.graphql;
+package com.flamingo.qa.models.graphql;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

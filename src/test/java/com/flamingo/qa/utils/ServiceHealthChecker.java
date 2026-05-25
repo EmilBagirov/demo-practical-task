@@ -1,6 +1,6 @@
 package com.flamingo.qa.utils;
 
-import com.flamingo.qa.service.BookingService;
+import com.flamingo.qa.services.BookingService;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.Assumptions;
 

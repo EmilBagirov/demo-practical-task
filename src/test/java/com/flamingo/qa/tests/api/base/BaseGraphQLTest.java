@@ -1,7 +1,7 @@
 package com.flamingo.qa.tests.api.base;
 
-import com.flamingo.qa.config.ApiConfig;
-import com.flamingo.qa.service.GraphQLService;
+import com.flamingo.qa.configs.ApiConfig;
+import com.flamingo.qa.services.GraphQLService;
 import org.junit.jupiter.api.BeforeAll;
 
 public abstract class BaseGraphQLTest extends BaseApiTest {

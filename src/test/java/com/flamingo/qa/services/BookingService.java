@@ -1,9 +1,9 @@
-package com.flamingo.qa.service;
+package com.flamingo.qa.services;
 
-import com.flamingo.qa.model.booking.AuthRequest;
-import com.flamingo.qa.model.booking.AuthResponse;
-import com.flamingo.qa.model.booking.Booking;
-import com.flamingo.qa.model.booking.BookingId;
+import com.flamingo.qa.models.booking.AuthRequest;
+import com.flamingo.qa.models.booking.AuthResponse;
+import com.flamingo.qa.models.booking.Booking;
+import com.flamingo.qa.models.booking.BookingId;
 import io.qameta.allure.Step;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.specification.RequestSpecification;

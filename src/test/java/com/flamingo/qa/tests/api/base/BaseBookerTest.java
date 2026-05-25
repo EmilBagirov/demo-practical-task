@@ -1,7 +1,7 @@
 package com.flamingo.qa.tests.api.base;
 
-import com.flamingo.qa.config.ApiConfig;
-import com.flamingo.qa.service.BookingService;
+import com.flamingo.qa.configs.ApiConfig;
+import com.flamingo.qa.services.BookingService;
 import com.flamingo.qa.utils.ServiceHealthChecker;
 import org.junit.jupiter.api.BeforeAll;
 

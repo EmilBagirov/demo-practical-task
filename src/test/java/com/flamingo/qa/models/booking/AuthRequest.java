@@ -1,4 +1,4 @@
-package com.flamingo.qa.model.booking;
+package com.flamingo.qa.models.booking;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingDates {
-    private String checkin;
-    private String checkout;
+public class AuthRequest {
+    private String username;
+    private String password;
 }

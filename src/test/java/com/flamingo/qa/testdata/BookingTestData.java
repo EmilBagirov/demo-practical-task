@@ -1,7 +1,7 @@
 package com.flamingo.qa.testdata;
 
-import com.flamingo.qa.model.booking.Booking;
-import com.flamingo.qa.model.booking.BookingDates;
+import com.flamingo.qa.models.booking.Booking;
+import com.flamingo.qa.models.booking.BookingDates;
 import com.github.javafaker.Faker;
 
 import java.time.LocalDate;

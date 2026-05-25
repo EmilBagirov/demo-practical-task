@@ -58,8 +58,8 @@ public class TestLoggingExtension implements BeforeEachCallback, AfterEachCallba
 
         Formatter compactFormatter = new SimpleFormatter() {
             @Override
-            public String format(LogRecord record) {
-                return String.format("[%s] %s%n", record.getLevel().getName(), record.getMessage());
+            public String format(LogRecord logRecord) {
+                return String.format("[%s] %s%n", logRecord.getLevel().getName(), logRecord.getMessage());
             }
         };
 

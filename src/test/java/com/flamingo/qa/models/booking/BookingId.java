@@ -1,4 +1,4 @@
-package com.flamingo.qa.model.booking;
+package com.flamingo.qa.models.booking;
 
 import lombok.Data;
 

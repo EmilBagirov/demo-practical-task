@@ -1,7 +1,7 @@
 package com.flamingo.qa.tests.api.rest.booker;
 
-import com.flamingo.qa.config.ApiConfig;
-import com.flamingo.qa.model.booking.AuthRequest;
+import com.flamingo.qa.configs.ApiConfig;
+import com.flamingo.qa.models.booking.AuthRequest;
 import com.flamingo.qa.testdata.BookingTestData;
 import com.flamingo.qa.tests.api.base.BaseBookerTest;
 import io.qameta.allure.Description;
