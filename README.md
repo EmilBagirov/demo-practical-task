@@ -1,6 +1,6 @@
 # QA Automation Test Suite
 
-Java-based test automation portfolio covering REST API (Restful Booker), GraphQL API (Rick & Morty), and UI (DemoQA) testing. Built with REST Assured, Playwright for Java, JUnit 5, and Allure reporting.
+Java-based test automation portfolio covering REST API (Restful Booker), GraphQL API (Hygraph Video schema), and UI (DemoQA) testing. Built with REST Assured, Playwright for Java, JUnit 5, and Allure reporting.
 
 ---
 
@@ -178,16 +178,16 @@ Target: `https://restful-booker.herokuapp.com`
 
 Auth token is obtained once per test class via `POST /auth` and reused across all requests in that class.
 
-### API — GraphQL / Rick & Morty (`@Tag("api")`)
+### API — GraphQL / Hygraph Video schema (`@Tag("api")`)
 
-Target: `https://rickandmortyapi.com/graphql`
+Target: `https://us-east-1-shared-usea1-02.cdn.hygraph.com/content/clpvcopq3aavs01usft1idkgj/master`
 
 | Class | Coverage |
 |-------|----------|
-| `GraphQLPositiveTest` | Character list with pagination metadata; single character by ID; query with named variables; nested fields across Character → Location → Episode types |
-| `GraphQLNegativeTest` | Non-existent ID returns HTTP 200 with `data: null`; malformed query (syntax error) returns `errors[]`; non-existent field triggers schema validation error |
+| `GraphQLPositiveTest` | Movie list with pagination via `moviesConnection`; single movie by ID; query with named `$slug` variable; nested fields across Movie → Asset (moviePoster) types |
+| `GraphQLNegativeTest` | Non-existent ID returns HTTP 200 with `data: null`; malformed query (syntax error) returns HTTP 400 with `errors[]`; non-existent field triggers HTTP 400 schema validation error |
 
-All requests go to a single `POST /graphql` endpoint. Because GraphQL always responds with HTTP 200 for application-level errors, tests assert the `data` and `errors` fields rather than HTTP status codes (except for parse/validation errors where Rick & Morty returns 400).
+All requests go to a single `POST` endpoint. Because GraphQL always responds with HTTP 200 for application-level errors, tests assert the `data` and `errors` fields rather than HTTP status codes (except for parse/validation errors where Hygraph returns 400).
 
 ### UI — Practice Form (`@Tag("ui")`)
 
@@ -230,8 +230,8 @@ booker.base.url=https://restful-booker.herokuapp.com
 booker.username=YWRtaW4=        # Base64("admin")
 booker.password=cGFzc3dvcmQxMjM=  # Base64("password123")
 
-graphql.base.url=https://rickandmortyapi.com
-graphql.path=/graphql
+graphql.base.url=https://us-east-1-shared-usea1-02.cdn.hygraph.com
+graphql.path=/content/clpvcopq3aavs01usft1idkgj/master
 
 # UI
 ui.practice.form.url=https://demoqa.com/automation-practice-form
@@ -259,7 +259,7 @@ Configured in `junit-platform.properties`:
 
 **API layer first.** REST APIs are fast, deterministic, and give the highest signal per line of test code. Full CRUD coverage for Restful Booker ensures the service contract is verified end-to-end before a single browser is opened.
 
-**GraphQL contract testing.** Beyond the happy path, I deliberately included negative scenarios that probe the API's non-standard error handling (Rick & Morty returns HTTP 400 for syntax errors rather than the spec default of HTTP 200). Tests document this behaviour explicitly so future engineers know it is intentional.
+**GraphQL contract testing.** Beyond the happy path, I deliberately included negative scenarios that probe the API's error handling (Hygraph returns HTTP 400 for syntax and schema-validation errors rather than the spec default of HTTP 200). Tests document this behaviour explicitly so future engineers know it is intentional.
 
 **Page Object Model for all UI.** Each page and modal is a separate class with `@Step`-annotated methods, making Allure reports readable as a prose description of the test. Page objects return `this` for fluent chaining; they never contain assertions.
 
@@ -286,10 +286,7 @@ Banner ads at the bottom of the page covered the Submit button, causing Playwrig
 **5. Restful Booker periodic data reset**
 The public API resets all bookings every 10 minutes. Tests that assumed pre-existing records were fragile. All tests now create their own booking in the test body and reference it by the returned ID.
 
-**6. GraphQL always returns HTTP 200**
-Standard GraphQL convention is to return HTTP 200 even for errors (error details go in the `errors` field). Tests assert the `data` / `errors` JSON structure instead of HTTP status codes. Rick & Morty diverges for syntax errors (returns 400) — this is documented in the test description.
-
-**7. City dropdown `disabled` detection**
+**6. City dropdown `disabled` detection**
 The DemoQA React Select component does not use the native HTML `disabled` attribute. It sets `aria-disabled="true"` on an inner `div[class*='-control']`. Using the correct attribute selector fixed the flaky `isCityDisabled()` check.
 
 ---
@@ -308,5 +305,3 @@ The DemoQA React Select component does not use the native HTML `disabled` attrib
 - GitHub Actions workflow: `mvn clean test` on push + PR, Allure report published to GitHub Pages
 - Docker `Dockerfile` for hermetic runs (no host Java/Maven required in CI)
 - Test retry extension (`@RetryingTest`) for the handful of DemoQA tests that are sensitive to ad-network latency
-- Environment profiles (`dev`, `staging`) loaded via Maven profiles, keeping `project.properties` environment-agnostic
-- Reporting Slack/Teams webhook notification on pipeline failure

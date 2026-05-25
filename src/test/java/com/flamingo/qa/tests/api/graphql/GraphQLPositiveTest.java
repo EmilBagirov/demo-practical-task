@@ -14,7 +14,6 @@ import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 @Tag("api")
@@ -22,60 +21,58 @@ import static org.hamcrest.Matchers.nullValue;
 class GraphQLPositiveTest extends BaseGraphQLTest {
 
     @Test
-    @DisplayName("GraphQL — query character list with pagination")
-    @Description("Fetches page 1 of characters and verifies pagination metadata and non-empty results")
-    void shouldQueryCharacterListWithPagination() {
+    @DisplayName("GraphQL — query movie list with pagination")
+    @Description("Fetches first 5 movies via moviesConnection and verifies aggregate count, pageInfo, and non-empty edges")
+    void shouldQueryMovieListWithPagination() {
         graphqlService.execute(GraphQLRequest.builder()
-                        .query("{ characters(page: 1) { info { count pages } results { id name } } }")
+                        .query("{ moviesConnection(first: 5) { aggregate { count } pageInfo { hasNextPage } edges { node { id title } } } }")
                         .build())
                 .statusCode(200)
                 .body("errors", nullValue())
-                .body("data.characters.info.count", greaterThan(0))
-                .body("data.characters.info.pages", greaterThan(0))
-                .body("data.characters.results.size()", greaterThan(0));
+                .body("data.moviesConnection.aggregate.count", greaterThan(0))
+                .body("data.moviesConnection.pageInfo.hasNextPage", equalTo(true))
+                .body("data.moviesConnection.edges.size()", greaterThan(0));
     }
 
     @Test
-    @DisplayName("GraphQL — query single character by ID")
-    @Description("Fetches character with ID 1 and verifies known stable field values")
-    void shouldQuerySingleCharacterById() {
+    @DisplayName("GraphQL — query single movie by ID")
+    @Description("Fetches Jaws by its stable ID and verifies known field values")
+    void shouldQuerySingleMovieById() {
         graphqlService.execute(GraphQLRequest.builder()
-                        .query("{ character(id: 1) { id name status species } }")
+                        .query("{ movie(where: {id: \"clq16555f0nqq0ak8fvxe2c0d\"}) { id title slug } }")
                         .build())
                 .statusCode(200)
                 .body("errors", nullValue())
-                .body("data.character.id", equalTo("1"))
-                .body("data.character.name", equalTo("Rick Sanchez"))
-                .body("data.character.status", not(emptyString()))
-                .body("data.character.species", not(emptyString()));
+                .body("data.movie.id", equalTo("clq16555f0nqq0ak8fvxe2c0d"))
+                .body("data.movie.title", equalTo("Jaws"))
+                .body("data.movie.slug", equalTo("jaws"));
     }
 
     @Test
     @DisplayName("GraphQL — query using variables instead of string interpolation")
-    @Description("Passes character ID via a named variable and verifies the response matches")
+    @Description("Passes movie slug via a named variable and verifies the response matches")
     void shouldQueryWithGraphQLVariables() {
         graphqlService.execute(GraphQLRequest.builder()
-                        .query("query GetCharacter($id: ID!) { character(id: $id) { id name } }")
-                        .variables(Map.of("id", "2"))
+                        .query("query GetMovie($slug: String!) { movie(where: {slug: $slug}) { id title slug } }")
+                        .variables(Map.of("slug", "jaws"))
                         .build())
                 .statusCode(200)
                 .body("errors", nullValue())
-                .body("data.character.id", equalTo("2"))
-                .body("data.character.name", equalTo("Morty Smith"));
+                .body("data.movie.title", equalTo("Jaws"))
+                .body("data.movie.slug", equalTo("jaws"));
     }
 
     @Test
     @DisplayName("GraphQL — query with nested fields across types")
-    @Description("Traverses Character → Location → dimension and Character → Episode to verify cross-type nesting")
+    @Description("Traverses Movie → Asset (moviePoster) and verifies cross-type nesting returns a valid URL")
     void shouldQueryNestedFieldsAcrossTypes() {
         graphqlService.execute(GraphQLRequest.builder()
-                        .query("{ character(id: 1) { name origin { name dimension } episode { name air_date } } }")
+                        .query("{ movie(where: {slug: \"requiem-for-a-dream\"}) { title moviePoster { id url } } }")
                         .build())
                 .statusCode(200)
                 .body("errors", nullValue())
-                .body("data.character.name", equalTo("Rick Sanchez"))
-                .body("data.character.origin.name", not(emptyString()))
-                .body("data.character.origin.dimension", notNullValue())
-                .body("data.character.episode.size()", greaterThan(0));
+                .body("data.movie.title", equalTo("Requiem for a dream"))
+                .body("data.movie.moviePoster.id", equalTo("clq5mrve80z470bk0ufvjw8lj"))
+                .body("data.movie.moviePoster.url", not(emptyString()));
     }
 }

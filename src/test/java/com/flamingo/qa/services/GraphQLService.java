@@ -25,17 +25,17 @@ public class GraphQLService {
                 .then();
     }
 
-    @Step("GraphQL — get total character count")
-    public int getCharactersCount() {
+    @Step("GraphQL — get total movie count")
+    public int getMoviesCount() {
         return given(spec)
                 .body(GraphQLRequest.builder()
-                        .query("{ characters { info { count } } }")
+                        .query("{ moviesConnection { aggregate { count } } }")
                         .build())
                 .when()
                 .post(ApiConfig.GRAPHQL_PATH)
                 .then()
                 .statusCode(200)
                 .extract()
-                .path("data.characters.info.count");
+                .path("data.moviesConnection.aggregate.count");
     }
 }
