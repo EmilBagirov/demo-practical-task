@@ -7,10 +7,12 @@ import io.qameta.allure.Step;
 
 import java.util.List;
 
+import static com.flamingo.qa.utils.WaitUtils.waitFor;
+
 public class WebTablesPage {
 
-    private static final String ROW_GROUP = ".rt-tbody .rt-tr-group";
-    private static final String CELL      = ".rt-td";
+    private static final String ROW_GROUP = "tbody tr";
+    private static final String CELL      = "td";
 
     private final Page page;
 
@@ -38,11 +40,10 @@ public class WebTablesPage {
 
     @Step("Get visible data row count")
     public int getDataRowCount() {
-        return (int) page.locator(ROW_GROUP)
-                .filter(new Locator.FilterOptions().setHasNotText(""))
+        return waitFor(() -> (int) page.locator(ROW_GROUP)
                 .all().stream()
                 .filter(row -> !row.locator(CELL).first().innerText().trim().isEmpty())
-                .count();
+                .count());
     }
 
     @Step("Click Add button")
@@ -64,15 +65,17 @@ public class WebTablesPage {
 
     @Step("Check row is present with email: {email}")
     public boolean isRowPresentWithEmail(String email) {
-        return page.locator(ROW_GROUP + ":has-text('" + email + "')").count() > 0;
+        return waitFor(() -> page.locator(ROW_GROUP + ":has-text('" + email + "')").count() > 0);
     }
 
     @Step("Get row data for email: {email}")
     public List<String> getRowDataByEmail(String email) {
-        List<Locator> cells = rowByEmail(email).locator(CELL).all();
-        return cells.subList(0, 6).stream()
-                .map(cell -> cell.innerText().trim())
-                .collect(java.util.stream.Collectors.toList());
+        return waitFor(() -> {
+            List<Locator> cells = rowByEmail(email).locator(CELL).all();
+            return cells.subList(0, 6).stream()
+                    .map(cell -> cell.innerText().trim())
+                    .collect(java.util.stream.Collectors.toList());
+        });
     }
 
     @Step("Click column header to sort: {columnName}")
@@ -83,15 +86,16 @@ public class WebTablesPage {
 
     @Step("Get all visible values for column index {columnIndex}")
     public List<String> getColumnValues(int columnIndex) {
-        return page.locator(ROW_GROUP)
+        return waitFor(() -> page.locator(ROW_GROUP)
                 .filter(new Locator.FilterOptions().setHasNotText(""))
                 .all().stream()
                 .filter(row -> !row.locator(CELL).first().innerText().trim().isEmpty())
                 .map(row -> row.locator(CELL).nth(columnIndex).innerText().trim())
-                .collect(java.util.stream.Collectors.toList());
+                .collect(java.util.stream.Collectors.toList()));
     }
 
     private Locator rowByEmail(String email) {
         return page.locator(ROW_GROUP).filter(new Locator.FilterOptions().setHasText(email)).first();
     }
+
 }

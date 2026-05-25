@@ -127,6 +127,7 @@
                 <configuration>
                     <reportVersion>${allure.version}</reportVersion>
                     <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+                    <installDirectory>${user.home}/.allure</installDirectory>
                 </configuration>
                 <executions>
                     <execution>

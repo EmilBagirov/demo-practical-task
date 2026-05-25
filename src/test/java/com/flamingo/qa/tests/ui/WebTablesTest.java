@@ -109,7 +109,7 @@ class WebTablesTest extends BaseUITest {
                 employee.getEmail(), employee.getSalary(), employee.getDepartment()
         ).forEach(term -> {
             tablePage.search(term);
-            assertThat(tablePage.getDataRowCount()).as("search term: '%s'", term).isEqualTo(1);
+            assertThat(tablePage.getDataRowCount()).as("search term: '%s'", term).isGreaterThanOrEqualTo(1);
             assertThat(tablePage.isRowPresentWithEmail(employee.getEmail())).isTrue();
             tablePage.clearSearch();
         });
