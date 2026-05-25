@@ -333,6 +333,4 @@ The DemoQA React Select component does not use the native HTML `disabled` attrib
 - Accessibility assertions (`aria-label` presence, keyboard navigation through the form)
 
 **Infrastructure**
-- GitHub Actions workflow: `mvn clean test` on push + PR, Allure report published to GitHub Pages
-- Docker `Dockerfile` for hermetic runs (no host Java/Maven required in CI)
 - Test retry extension (`@RetryingTest`) for the handful of DemoQA tests that are sensitive to ad-network latency
